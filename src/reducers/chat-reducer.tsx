@@ -7,12 +7,7 @@ export type chatState = {
 
 export type chatAction = {
   type: "add-all" | "add";
-  payload: {
-    from: string;
-    to: string;
-    message: string;
-    created_at: string;
-  }[];
+  payload: chatState;
 };
 
 export function chatReducer(state: chatState, action: chatAction) {

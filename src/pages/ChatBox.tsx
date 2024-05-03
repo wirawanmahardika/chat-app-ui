@@ -16,8 +16,10 @@ export default function ChatBox() {
   const [friendStatus, setFriendStatus] = useState(false);
 
   useEffect(() => {
-    MyAxios.get("/api/v1/chats/" + state.id_friendship)
+    MyAxios.get("/api/v1/chats/" + state?.id_friendship)
       .then((res) => {
+        console.log(res.data);
+
         dispatch({ type: "add-all", payload: res.data });
         scrollToBottom?.current.scrollIntoView({
           behavior: "smooth",
@@ -47,7 +49,7 @@ export default function ChatBox() {
       socket.send(
         JSON.stringify({
           type: "subscribe",
-          data: { channel: state.id_friendship, id_friend: state.id },
+          data: { channel: state?.id_friendship, id_friend: state.id },
         })
       );
     };
@@ -66,9 +68,12 @@ export default function ChatBox() {
                 to: user.username,
                 created_at: dayjs().toString(),
                 from: state.id,
+                // photo: ws.data.photo,
               },
             ],
           });
+          break;
+        case "chat_with_photo":
           break;
         case "join":
           setFriendStatus(ws.status);
@@ -87,7 +92,7 @@ export default function ChatBox() {
         socket.send(
           JSON.stringify({
             type: "leave",
-            data: { channel: state.id_friendship },
+            data: { channel: state?.id_friendship },
           })
         );
       }
@@ -96,14 +101,14 @@ export default function ChatBox() {
     };
   }, []);
 
-  const messageFormAction = (e: any) => {
+  const messageFormAction = async (e: any) => {
     e.preventDefault();
 
     socket.send(
       JSON.stringify({
         type: "chat",
         data: {
-          channel: state.id_friendship,
+          channel: state?.id_friendship,
           message: e.target.message.value,
           to: state.id,
         },
@@ -175,15 +180,18 @@ export default function ChatBox() {
 
       <form
         onSubmit={messageFormAction}
-        className="fixed bottom-0 left-0 right-0 min-h-10 bg-zinc-950 flex gap-2 justify-evenly items-center py-3"
+        className="fixed bottom-0 left-0 right-0 bg-zinc-950 "
       >
-        <input
-          type="text"
-          name="message"
-          className="w-4/5 rounded py-1 px-2 outline-none border-2 bg-zinc-600 border-zinc-500 text-zinc-950 focus-within:text-white focus-within:border-emerald-500 focus-within:bg-zinc-950 "
-          placeholder="Type your message here..."
-        />
-        <button className="bg-emerald-600 px-2 py-1 rounded">Send</button>
+        <div className="min-h-10 flex gap-2 justify-evenly items-center py-3 px-2">
+          <input
+            type="text"
+            name="message"
+            className="w-3/4 rounded py-1 px-2 outline-none border-2 bg-zinc-600 border-zinc-500 text-zinc-950 focus-within:text-white focus-within:border-emerald-500 focus-within:bg-zinc-950 "
+            placeholder="Type your message here..."
+          />
+
+          <button className="bg-emerald-600 px-2 py-1 rounded">Send</button>
+        </div>
       </form>
     </div>
   );
@@ -191,7 +199,7 @@ export default function ChatBox() {
 
 function FriendChat({ message, time }: { message: string; time: string }) {
   return (
-    <div className="p-2 bg-zinc-950 w-4/5 rounded my-3 flex pb-5 relative ml-2">
+    <div className="p-2 bg-zinc-950 w-4/5 rounded my-3 flex pb-5 relative ml-2 flex-col gap-y-2 lg:w-1/2">
       <span>{message}</span>
       <span className="absolute bottom-0 right-1">{time}</span>
     </div>
@@ -200,8 +208,8 @@ function FriendChat({ message, time }: { message: string; time: string }) {
 
 function SelfChat({ message, time }: { message: string; time: string }) {
   return (
-    <div className="p-2 w-4/5 rounded my-3 flex pb-5 relative ml-auto mr-2 bg-emerald-600">
-      <span>{message}</span>
+    <div className="p-2 w-4/5 rounded my-3 flex flex-col pb-5 relative ml-auto mr-2 bg-emerald-600 lg:w-1/2 gap-y-2">
+      <span className="break-words">{message}</span>
       <span className="absolute bottom-0 right-1">{time}</span>
     </div>
   );
