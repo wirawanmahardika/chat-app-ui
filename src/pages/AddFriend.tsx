@@ -5,7 +5,7 @@ import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useGetUser from "../hooks/useGetUser";
 
-export default function AddFriend() {
+export function Component() {
   useGetUser(); // user authentication, will direct to login page if not authenticated
   const formSumbmitHandle = async (e: any) => {
     e.preventDefault();
@@ -77,19 +77,7 @@ export default function AddFriend() {
       </form>
       <Nav />
 
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition={Bounce}
-      />
+      <ToastContainer />
     </div>
   );
 }

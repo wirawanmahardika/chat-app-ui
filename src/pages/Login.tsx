@@ -4,7 +4,7 @@ import { Bounce, ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { NavLink, useNavigate } from "react-router-dom";
 
-export default function Login() {
+export function Component() {
   const navigate = useNavigate();
 
   const loginSubmitHandle = async (e: any) => {
@@ -36,6 +36,8 @@ export default function Login() {
         navigate("/", { state: { interval: redirectID } });
       }, 2000);
     } catch (error: any) {
+      console.log(error);
+
       toast.update(toastId, {
         type: "error",
         isLoading: false,
@@ -110,19 +112,7 @@ export default function Login() {
         </span>
       </form>
 
-      <ToastContainer
-        position="top-center"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-        transition={Bounce}
-      />
+      <ToastContainer />
     </div>
   );
 }

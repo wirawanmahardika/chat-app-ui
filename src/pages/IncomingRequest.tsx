@@ -10,7 +10,7 @@ import {
 } from "../reducers/incoming-request-reducer";
 import useGetUser from "../hooks/useGetUser";
 
-export default function IncomingRequest() {
+export function Component() {
   useGetUser(); // user authentication, will direct to login page if not authenticated
   const requests = useLoaderData() as {
     id_friendship: string;
@@ -158,7 +158,7 @@ function Request({
   );
 }
 
-export const incomingRequestLoader = async () => {
+export const loader = async () => {
   try {
     const res = await MyAxios.get("/api/v1/friend/relationship-requests");
     return res.data;

@@ -2,8 +2,10 @@ import { useNavigate } from "react-router-dom";
 import Nav from "../components/Nav";
 import { MyAxios } from "../helper/axios-instances";
 import useGetUser from "../hooks/useGetUser";
+import { Bounce, toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Profile() {
+export function Component() {
   const navigate = useNavigate();
   const user = useGetUser();
 
@@ -22,7 +24,37 @@ export default function Profile() {
         className="rounded-full size-52 mx-auto"
       />
       <span className="font-bold text-3xl mx-auto">{user.fullname}</span>
-      <span className=" mx-auto">ID : {user.id}</span>
+      <span className="mx-auto">ID :
+        <span className="ml-2 hover:text-blue-600 cursor-pointer" onClick={(e: any) => {
+          const text = e.target.textContent
+          navigator.clipboard.writeText(text)
+            .then(function () {
+              toast.success("Berhasil menyalin id", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+              });
+            }, function () {
+              toast.error("Terjadi kesalahan dalam menyalin id", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Bounce,
+              });
+            });
+        }}>{user.id}</span>
+      </span>
 
       <ul className="mx-auto mt-5 text-lg">
         <li>Email : {user.email}</li>
@@ -38,6 +70,7 @@ export default function Profile() {
         Logout
       </button>
       <Nav />
+      <ToastContainer />
     </div>
   );
 }

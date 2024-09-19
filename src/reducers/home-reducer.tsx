@@ -18,8 +18,10 @@ type homeAction = {
 export function homeReducer(state: chatListState, action: homeAction) {
   switch (action.type) {
     case "add":
-      state = action.payload;
-      return state;
+      return {
+        ...state,
+        ...action.payload
+      };
     default:
       return state;
   }

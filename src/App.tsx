@@ -4,30 +4,17 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Home, { homeLoader } from "./pages/Home";
-import Login from "./pages/Login";
-import ChatBox from "./pages/ChatBox";
-import AddFriend from "./pages/AddFriend";
-import IncomingRequest, {
-  incomingRequestLoader,
-} from "./pages/IncomingRequest";
-import Profile from "./pages/Profile";
-import Signup from "./pages/Signup";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Home />} loader={homeLoader} />
-      <Route path="/chat/:id_friend" element={<ChatBox />} />
-      <Route path="/add-friend" element={<AddFriend />} />
-      <Route
-        path="/incoming-request"
-        element={<IncomingRequest />}
-        loader={incomingRequestLoader}
-      />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/" lazy={() => import("./pages/Home")} />
+      <Route path="/chat/:id_friend" lazy={() => import("./pages/ChatBox")} />
+      <Route path="/add-friend" lazy={() => import('./pages/AddFriend')} />
+      <Route path="/incoming-request" lazy={() => import("./pages/IncomingRequest")} />
+      <Route path="/profile" lazy={() => import("./pages/Profile")} />
+      <Route path="/login" lazy={() => import("./pages/Login")} />
+      <Route path="/signup" lazy={() => import("./pages/Signup")} />
     </>
   )
 );

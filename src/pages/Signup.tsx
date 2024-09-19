@@ -4,7 +4,7 @@ import Chat from "../icons/Chat";
 import "react-toastify/dist/ReactToastify.css";
 import { NavLink } from "react-router-dom";
 
-export default function Signup() {
+export function Component() {
   const submitHandle = async (e: any) => {
     e.preventDefault();
     const idToast = toast.loading("Memproses permintaan...");

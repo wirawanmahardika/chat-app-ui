@@ -6,7 +6,7 @@ import { chatReducer, chatState } from "../reducers/chat-reducer";
 import { MyAxios } from "../helper/axios-instances";
 import dayjs from "dayjs";
 
-export default function ChatBox() {
+export function Component() {
   const user = useGetUser(); // user authentication, will direct to login page if not authenticated
   const { state } = useLocation();
   const navigate = useNavigate();

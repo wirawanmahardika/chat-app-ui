@@ -7,18 +7,26 @@ import dayjs from "dayjs";
 import { homeReducer } from "../reducers/home-reducer";
 import lodash from "lodash";
 
-export default function Home() {
+export function Component() {
   useGetUser(); // user authentication, will direct to login page if not authenticated
   const initialData = useLoaderData() as [];
-  const { state } = useLocation();
+  const location = useLocation();
+  const { state } = location
   const [chatLists, dispatch] = useReducer(homeReducer, initialData);
+
+  const REFRESH_INTERVAL = 1000 * 60 * 10; // 10 menit (dalam milidetik)
+
+  useEffect(() => {
+    const refreshPage = () => { window.location.reload() };
+    const intervalId = setInterval(refreshPage, REFRESH_INTERVAL);
+    return () => clearInterval(intervalId);
+  }, [location]);
+
 
   useEffect(() => {
     if (state?.interval) clearInterval(state.interval);
 
-    const sse = new EventSource(import.meta.env.VITE_SSE_URL, {
-      withCredentials: true,
-    });
+    const sse = new EventSource(import.meta.env.VITE_SSE_URL, { withCredentials: true });
 
     const messageListener = (e: MessageEvent<any>) => {
       const data = JSON.parse(e.data);
@@ -91,23 +99,22 @@ function ChatList({
             {!userData.created_at
               ? ""
               : dayjs(userData.created_at).isAfter(dayjs().subtract(1, "day"))
-              ? "Today"
-              : dayjs(userData.created_at).isAfter(dayjs().subtract(2, "day"))
-              ? "Yesterday"
-              : dayjs(userData.created_at).format("DD/MM/YYYY")}
+                ? "Today"
+                : dayjs(userData.created_at).isAfter(dayjs().subtract(2, "day"))
+                  ? "Yesterday"
+                  : dayjs(userData.created_at).format("DD/MM/YYYY")}
           </span>
         </div>
         <span
-          className={`truncate ${
-            !userData.message ? "italic text-red-300" : ""
-          }`}
+          className={`truncate ${!userData.message ? "italic text-red-300" : ""
+            }`}
         >
           <span className="capitalize">
             {!userData.from
               ? ""
               : userData.from === userData.id
-              ? userData.username + " : "
-              : "you : "}
+                ? userData.username + " : "
+                : "you : "}
           </span>
           {!userData.message ? "No Messages Were Sent" : userData.message}
         </span>
@@ -116,7 +123,7 @@ function ChatList({
   );
 }
 
-export const homeLoader = async () => {
+export const loader = async () => {
   try {
     const res = await MyAxios.get("/api/v1/friend/get-all");
     return res.data;
