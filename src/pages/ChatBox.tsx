@@ -18,8 +18,6 @@ export function Component() {
   useEffect(() => {
     MyAxios.get("/api/v1/chats/" + state?.id_friendship)
       .then((res) => {
-        console.log(res.data);
-
         dispatch({ type: "add-all", payload: res.data });
         scrollToBottom?.current.scrollIntoView({
           behavior: "smooth",

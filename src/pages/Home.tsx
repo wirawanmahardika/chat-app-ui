@@ -12,7 +12,6 @@ export function Component() {
   const initialData = useLoaderData() as [];
   const location = useLocation();
   const { state } = location
-  const [chatLists, dispatch] = useReducer(homeReducer, initialData);
 
   const REFRESH_INTERVAL = 1000 * 60 * 10; // 10 menit (dalam milidetik)
 
@@ -23,6 +22,7 @@ export function Component() {
   }, [location]);
 
 
+  const [chatLists, dispatch] = useReducer(homeReducer, initialData);
   useEffect(() => {
     if (state?.interval) clearInterval(state.interval);
 
@@ -30,7 +30,6 @@ export function Component() {
 
     const messageListener = (e: MessageEvent<any>) => {
       const data = JSON.parse(e.data);
-
       const result = lodash.isEqual(data, chatLists);
       if (chatLists.length === 0 || !result) {
         dispatch({ type: "add", payload: data });
@@ -50,13 +49,13 @@ export function Component() {
       sse.removeEventListener("message", messageListener);
       sse.removeEventListener("error", errorListener);
     };
-  }, [chatLists]);
+  }, [dispatch]);
 
   return (
     <div className="font-roboto bg-zinc-900 min-h-screen text-stone-300">
-      {chatLists.map((cl: any) => {
+      {chatLists.length > 0 ? chatLists.map((cl: any) => {
         return <ChatList key={cl.id} userData={cl} />;
-      })}
+      }) : ""}
       <Nav />
     </div>
   );

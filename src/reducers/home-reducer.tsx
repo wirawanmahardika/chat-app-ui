@@ -10,7 +10,7 @@ export type chatListState = {
   created_at?: Date;
 }[];
 
-type homeAction = {
+export type homeAction = {
   type: "add";
   payload: chatListState;
 };
@@ -18,10 +18,7 @@ type homeAction = {
 export function homeReducer(state: chatListState, action: homeAction) {
   switch (action.type) {
     case "add":
-      return {
-        ...state,
-        ...action.payload
-      };
+      return [...action.payload];
     default:
       return state;
   }
